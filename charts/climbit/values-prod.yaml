@@ -8,7 +8,7 @@ replicas:
 externalSecrets:
   clusterSecretStoreName: "bitwarden-climbit-prod"
   keys:
-    jwtSecret: "<UUID_PROD_JWT_SECRET>"
-    postgresPassword: "<UUID_PROD_POSTGRES_PASSWORD>"
-    pgadminPassword: "<UUID_PROD_PGADMIN_PASSWORD>"
-    databaseUrl: "<UUID_PROD_DATABASE_URL>"
+    jwtSecret: "9cffe034-026a-4161-b1b1-b4ff0135a8e3"
+    postgresPassword: "7b45bf15-5ca7-419a-8fc1-b4ff0135c556"
+    pgadminPassword: "b004fd4a-9f37-4af8-a394-b4ff0135fa87"
+    databaseUrl: "ab4c13a9-d5bf-4cdb-a3ab-b4ff01364e6b"
