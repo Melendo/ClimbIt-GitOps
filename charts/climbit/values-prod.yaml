@@ -1,0 +1,14 @@
+ingress:
+  host: app.climbit.es
+
+replicas:
+  frontend: 2
+  backend: 2
+
+externalSecrets:
+  clusterSecretStoreName: "bitwarden-climbit-prod"
+  keys:
+    jwtSecret: "<UUID_PROD_JWT_SECRET>"
+    postgresPassword: "<UUID_PROD_POSTGRES_PASSWORD>"
+    pgadminPassword: "<UUID_PROD_PGADMIN_PASSWORD>"
+    databaseUrl: "<UUID_PROD_DATABASE_URL>"

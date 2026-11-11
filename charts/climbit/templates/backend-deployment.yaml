@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: climbit-uploads-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.storage.hddClass }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.uploadsSize }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: {{ .Values.replicas.backend }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      initContainers:
+        - name: db-migrate
+          image: "{{ .Values.image.backendRepo }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["npm", "run", "db:migrate"]
+          envFrom:
+            - configMapRef:
+                name: climbit-config
+            - secretRef:
+                name: climbit-secrets
+      containers:
+        - name: backend
+          image: "{{ .Values.image.backendRepo }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: climbit-config
+            - secretRef:
+                name: climbit-secrets
+          volumeMounts:
+            - name: uploads-storage
+              mountPath: /app/backend/uploads
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: uploads-storage
+          persistentVolumeClaim:
+            claimName: climbit-uploads-pvc
