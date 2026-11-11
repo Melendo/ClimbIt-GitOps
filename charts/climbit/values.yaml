@@ -9,7 +9,7 @@ config:
   jwtExpiresIn: "12h"
   postgresUser: "climbit"
   postgresDb: "climbit_db"
-  pgadminEmail: "admin@climbit.local"
+  pgadminEmail: "admin@climbit.es"
 
 storage:
   postgresSize: 5Gi
